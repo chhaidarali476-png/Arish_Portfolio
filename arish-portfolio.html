@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muhammad Arish — Lead Generation & Data Specialist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0F172A;
+    --ocean: #132238;
+    --slate: #1E293B;
+    --slate2: #243447;
+    --amber: #F59E0B;
+    --gold: #FDBA74;
+    --orange: #FB923C;
+    --warm: #FACC15;
+    --cyan: #22D3EE;
+    --sky: #38BDF8;
+    --violet: #8B5CF6;
+    --mint: #5EEAD4;
+    --white: #F8FAFC;
+    --silver: #CBD5E1;
+    --muted: #94A3B8;
+    --glass: rgba(255,255,255,0.05);
+    --glass2: rgba(255,255,255,0.08);
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CURSOR */
+  #cursor-dot {
+    width: 8px; height: 8px;
+    background: var(--cyan);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: background 0.3s;
+    box-shadow: 0 0 12px var(--cyan);
+  }
+  #cursor-ring {
+    width: 36px; height: 36px;
+    border: 1.5px solid rgba(34,211,238,0.5);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: transform 0.12s ease, width 0.2s, height 0.2s, border-color 0.3s;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.2rem 3rem;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(15,23,42,0.75);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.1rem;
+    background: linear-gradient(90deg, var(--cyan), var(--amber));
+    webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em;
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted); font-size: 0.85rem; letter-spacing: 0.05em;
+    text-decoration: none; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--cyan); }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--amber), var(--orange));
+    color: var(--navy); font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em;
+    text-transform: uppercase; padding: 0.6rem 1.4rem;
+    border-radius: 100px; text-decoration: none; border: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.85; transform: scale(0.98); }
+
+  /* BG ENGINE */
+  #bg-canvas {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%; z-index: 0;
+    pointer-events: none;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 8rem 3rem 4rem;
+    gap: 4rem;
+  }
+  .hero-left { flex: 1; max-width: 600px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(245,158,11,0.1);
+    border: 1px solid rgba(245,158,11,0.25);
+    border-radius: 100px; padding: 0.4rem 1rem;
+    font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.8rem;
+  }
+  .badge-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--amber);
+    animation: pulse-amber 2s infinite;
+  }
+  @keyframes pulse-amber {
+    0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,0.6);}
+    50%{box-shadow:0 0 0 6px rgba(245,158,11,0);}
+  }
+  .hero-name {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 800; line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.8rem;
+  }
+  .hero-name .first { color: var(--white); }
+  .hero-name .last {
+    background: linear-gradient(135deg, var(--amber) 0%, var(--orange) 50%, var(--cyan) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    display: block;
+  }
+  .hero-titles {
+    font-size: 1.05rem; color: var(--muted); margin-bottom: 2rem;
+    line-height: 1.8; font-weight: 300;
+  }
+  .hero-titles span { color: var(--sky); }
+  .hero-desc {
+    font-size: 1rem; color: var(--silver);
+    line-height: 1.75; max-width: 480px;
+    margin-bottom: 2.5rem; font-weight: 300;
+  }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--amber), var(--orange));
+    color: var(--navy); font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: 0.85rem; letter-spacing: 0.04em;
+    padding: 0.85rem 2rem; border-radius: 100px; text-decoration: none;
+    border: none; cursor: none; transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 8px 32px rgba(245,158,11,0.3);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(245,158,11,0.45); }
+  .btn-secondary {
+    background: var(--glass); border: 1px solid rgba(255,255,255,0.1);
+    color: var(--white); font-family: 'Syne', sans-serif;
+    font-weight: 600; font-size: 0.85rem; letter-spacing: 0.04em;
+    padding: 0.85rem 2rem; border-radius: 100px; text-decoration: none;
+    backdrop-filter: blur(10px); cursor: none; transition: border-color 0.2s, background 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--cyan); background: rgba(34,211,238,0.05); }
+
+  /* PORTRAIT */
+  .hero-right {
+    position: relative; flex-shrink: 0;
+    width: clamp(260px, 30vw, 380px);
+  }
+  .portrait-wrap {
+    position: relative;
+    width: 100%; aspect-ratio: 1;
+  }
+  .portrait-glow {
+    position: absolute; inset: -20%;
+    background: radial-gradient(ellipse, rgba(245,158,11,0.35) 0%, rgba(34,211,238,0.1) 50%, transparent 70%);
+    animation: glow-breathe 4s ease-in-out infinite;
+  }
+  @keyframes glow-breathe {
+    0%,100%{transform:scale(1);opacity:0.7;}
+    50%{transform:scale(1.08);opacity:1;}
+  }
+  .portrait-ring {
+    position: absolute; inset: -4px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--amber), var(--cyan), var(--violet), var(--orange));
+    padding: 3px;
+    animation: ring-spin 8s linear infinite;
+  }
+  @keyframes ring-spin {
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+  }
+  .portrait-ring-inner {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    background: var(--navy);
+  }
+  .portrait-img {
+    position: absolute; inset: 3px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: linear-gradient(135deg, #F59E0B44, #132238);
+  }
+  .portrait-img img {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: top center;
+    border-radius: 50%;
+  }
+  .portrait-hologram {
+    position: absolute; top: 8%; right: -18%;
+    background: rgba(34,211,238,0.06);
+    border: 1px solid rgba(34,211,238,0.2);
+    backdrop-filter: blur(12px);
+    border-radius: 12px; padding: 0.8rem 1rem;
+    min-width: 130px;
+    animation: float-card 3s ease-in-out infinite;
+  }
+  @keyframes float-card {
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-8px);}
+  }
+  .hologram-label { font-size: 0.6rem; color: var(--cyan); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.3rem; }
+  .hologram-value { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--white); }
+  .hologram-sub { font-size: 0.65rem; color: var(--muted); margin-top: 0.15rem; }
+  .portrait-hologram2 {
+    position: absolute; bottom: 12%; left: -22%;
+    background: rgba(245,158,11,0.06);
+    border: 1px solid rgba(245,158,11,0.2);
+    backdrop-filter: blur(12px);
+    border-radius: 12px; padding: 0.8rem 1rem;
+    min-width: 140px;
+    animation: float-card 3.5s ease-in-out infinite reverse;
+  }
+  .hologram-label2 { font-size: 0.6rem; color: var(--amber); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.3rem; }
+
+  /* STATS */
+  .stats-row {
+    display: flex; gap: 2rem; margin-top: 3rem;
+  }
+  .stat-item { }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem; font-weight: 800; color: var(--white);
+    background: linear-gradient(135deg, var(--amber), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 0.1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* SECTION BASE */
+  section { position: relative; z-index: 1; }
+  .section-label {
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--amber); margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .section-label::before {
+    content: ''; display: block;
+    width: 28px; height: 1px; background: var(--amber);
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800; letter-spacing: -0.03em; line-height: 1.1;
+    margin-bottom: 1.2rem;
+  }
+
+  /* ABOUT */
+  .about { padding: 6rem 3rem; max-width: 1200px; margin: 0 auto; }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .about-text { font-size: 1rem; color: var(--silver); line-height: 1.85; font-weight: 300; }
+  .about-text p { margin-bottom: 1.2rem; }
+  .about-text strong { color: var(--white); font-weight: 500; }
+  .about-highlight {
+    background: linear-gradient(135deg, rgba(245,158,11,0.07), rgba(34,211,238,0.05));
+    border: 1px solid rgba(245,158,11,0.15);
+    border-left: 3px solid var(--amber);
+    border-radius: 0 12px 12px 0;
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+    font-size: 1.05rem; color: var(--gold); font-style: italic;
+  }
+  .about-visual {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  }
+  .about-card {
+    background: var(--glass);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px; padding: 1.5rem;
+    backdrop-filter: blur(10px);
+    transition: border-color 0.25s, transform 0.25s;
+  }
+  .about-card:hover { border-color: rgba(245,158,11,0.3); transform: translateY(-4px); }
+  .about-card:first-child { grid-column: span 2; }
+  .about-card-icon {
+    font-size: 1.6rem; margin-bottom: 0.8rem;
+  }
+  .about-card h4 {
+    font-family: 'Syne', sans-serif; font-size: 0.85rem;
+    color: var(--white); margin-bottom: 0.4rem;
+  }
+  .about-card p { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+  /* SKILLS */
+  .skills-section { padding: 6rem 3rem; max-width: 1200px; margin: 0 auto; }
+  .skills-header { text-align: center; margin-bottom: 4rem; }
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.2rem;
+  }
+  .skill-card {
+    position: relative; overflow: hidden;
+    background: var(--glass);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px; padding: 1.4rem 1.5rem;
+    backdrop-filter: blur(10px);
+    cursor: none;
+    transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+  }
+  .skill-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    border-color: rgba(34,211,238,0.3);
+    box-shadow: 0 16px 48px rgba(34,211,238,0.1);
+  }
+  .skill-card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    opacity: 0; transition: opacity 0.25s;
+  }
+  .skill-card:hover::before { opacity: 1; }
+  .skill-icon { font-size: 1.4rem; margin-bottom: 0.8rem; }
+  .skill-name {
+    font-family: 'Syne', sans-serif; font-size: 0.85rem;
+    font-weight: 600; color: var(--white); margin-bottom: 0.3rem;
+  }
+  .skill-level {
+    font-size: 0.7rem; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .skill-bar {
+    height: 2px; background: rgba(255,255,255,0.08);
+    border-radius: 2px; margin-top: 0.8rem; overflow: hidden;
+  }
+  .skill-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--amber), var(--cyan));
+    border-radius: 2px;
+    transform-origin: left;
+    animation: skill-grow 1.5s ease-out forwards;
+    transform: scaleX(0);
+  }
+  @keyframes skill-grow { to { transform: scaleX(1); } }
+
+  /* SERVICES */
+  .services { padding: 6rem 3rem; max-width: 1200px; margin: 0 auto; }
+  .services-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; margin-top: 3rem;
+  }
+  .service-card {
+    background: linear-gradient(135deg, rgba(19,34,56,0.8), rgba(36,52,71,0.6));
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px; padding: 2rem;
+    backdrop-filter: blur(12px);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .service-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .service-card.featured {
+    background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(251,146,60,0.06));
+    border-color: rgba(245,158,11,0.25);
+  }
+  .service-num {
+    font-family: 'Syne', sans-serif; font-size: 0.7rem;
+    color: var(--amber); letter-spacing: 0.1em; margin-bottom: 1.2rem;
+  }
+  .service-title {
+    font-family: 'Syne', sans-serif; font-size: 1.1rem;
+    font-weight: 700; color: var(--white); margin-bottom: 0.8rem;
+  }
+  .service-desc {
+    font-size: 0.85rem; color: var(--muted); line-height: 1.7;
+  }
+
+  /* CONTACT */
+  .contact { padding: 6rem 3rem; max-width: 900px; margin: 0 auto; text-align: center; }
+  .contact-title { margin-bottom: 1rem; }
+  .contact-sub {
+    font-size: 1.05rem; color: var(--muted); margin-bottom: 3rem;
+    font-weight: 300; line-height: 1.7;
+  }
+  .contact-cards {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+    margin-bottom: 3rem; text-align: left;
+  }
+  .contact-card {
+    background: var(--glass);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 20px; padding: 1.8rem;
+    text-decoration: none;
+    transition: transform 0.2s, border-color 0.2s;
+    display: block;
+  }
+  .contact-card:hover { transform: translateY(-4px); border-color: rgba(34,211,238,0.3); }
+  .contact-card-label { font-size: 0.65rem; color: var(--cyan); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+  .contact-card-value { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 600; color: var(--white); word-break: break-all; }
+  .socials {
+    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+  }
+  .social-link {
+    display: flex; align-items: center; gap: 0.5rem;
+    background: var(--glass2);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 100px;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.8rem; color: var(--silver); text-decoration: none;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+  }
+  .social-link:hover {
+    color: var(--white); border-color: var(--amber);
+    background: rgba(245,158,11,0.08);
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative; z-index: 1;
+    text-align: center; padding: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    color: var(--muted); font-size: 0.8rem;
+  }
+  footer span { color: var(--amber); }
+
+  /* DIVIDER */
+  .divider {
+    width: 100%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+    max-width: 1200px; margin: 0 auto;
+  }
+
+  /* ENERGY TRAIL CANVAS */
+  #trail-canvas {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 2;
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  @media (max-width: 900px) {
+    .hero { flex-direction: column; padding: 7rem 1.5rem 3rem; gap: 3rem; }
+    .hero-right { width: min(280px, 80vw); align-self: center; }
+    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .services-grid { grid-template-columns: 1fr 1fr; }
+    .contact-cards { grid-template-columns: 1fr; }
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .stats-row { gap: 1.5rem; }
+    .portrait-hologram, .portrait-hologram2 { display: none; }
+  }
+  @media (max-width: 600px) {
+    .services-grid { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: repeat(2, 1fr); }
+    .about, .skills-section, .services, .contact { padding: 4rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CURSORS -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- BG CANVAS -->
+<canvas id="bg-canvas"></canvas>
+<canvas id="trail-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Muhammad Arish</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a; href="https://wa.me/9230400140947?text=How%20can%20I%20help%20you%20today" class="nav-cta" target="_blank">Hire Me</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Available for Freelance Projects
+    </div>
+    <h1 class="hero-name">
+      <span class="first">Muhammad</span>
+      <span class="last">Arish</span>
+    </h1>
+    <p class="hero-titles">
+      <span>Lead Generation</span> · Data Mining · LinkedIn Expert<br>
+      Virtual Assistant · Graphic Designer · Web Research
+    </p>
+    <p class="hero-desc">
+      A premium freelance specialist with 5 years of experience delivering precision-driven results. From targeted lead generation to stunning graphic design — I build systems that grow businesses.
+    </p>
+    <div class="hero-btns">
+      <a href="https://wa.me/9230400140947?text=How%20can%20I%20help%20you%20today" class="btn-primary" target="_blank">Start a Project</a>
+      <a href="https://www.upwork.com/freelancers/~0161f346eb7ef9acd7?mp_source=share" class="btn-secondary" target="_blank">View Upwork Profile</a>
+    </div>
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-num">5+</div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">200+</div>
+        <div class="stat-label">Projects Delivered</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">17</div>
+        <div class="stat-label">Core Skills</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="portrait-wrap">
+      <div class="portrait-glow"></div>
+      <div class="portrait-ring">
+        <div class="portrait-ring-inner"></div>
+      </div>
+      <div class="portrait-img">
+        <img src="ChatGPT Image May 16, 2026, 04_14_31 PM.png">" alt="Muhammad Arish" />
+      </div>
+    </div>
+    <div class="portrait-hologram">
+      <div class="hologram-label">Status</div>
+      <div class="hologram-value">Online</div>
+      <div class="hologram-sub">Pakistan · UTC+5</div>
+    </div>
+    <div class="portrait-hologram2">
+      <div class="hologram-label2">Expertise</div>
+      <div class="hologram-value">Lead Gen</div>
+      <div class="hologram-sub">Top Rated · Upwork</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-grid">
+    <div class="reveal">
+      <div class="section-label">The Story</div>
+      <h2 class="section-title">Driven by<br>precision & results</h2>
+      <div class="about-text">
+        <p>Based in Pakistan with a postal code of <strong>63100</strong>, I've spent the last 5 years mastering the art of digital intelligence — translating raw data into actionable business opportunities for clients worldwide.</p>
+        <div class="about-highlight">
+          "Every dataset tells a story. My job is to find the one that grows your business."
+        </div>
+        <p>My freelance journey began with a simple mission: help businesses find the right people at the right time. Today, that mission has expanded into a full suite of data, design, and research services that serve entrepreneurs and enterprises alike.</p>
+        <p>I believe in <strong>precision over volume</strong>, quality over shortcuts, and long-term partnerships over one-off transactions. Every project I take on receives my complete focus and creative intelligence.</p>
+      </div>
+    </div>
+    <div class="about-visual reveal reveal-delay-2">
+      <div class="about-card">
+        <div class="about-card-icon">🌏</div>
+        <h4>Global Reach</h4>
+        <p>Delivering results for clients across North America, Europe, and Asia — from a powerbase in Pakistan with a 5-star service mindset.</p>
+      </div>
+      <div class="about-card">
+        <div class="about-card-icon">⚡</div>
+        <h4>Fast Turnaround</h4>
+        <p>Speed without sacrificing quality. Deadlines are commitments, not suggestions.</p>
+      </div>
+      <div class="about-card">
+        <div class="about-card-icon">🎯</div>
+        <h4>Data Precision</h4>
+        <p>Every lead, every contact, every data point is verified and validated before delivery.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<section class="skills-section" id="skills">
+  <div class="skills-header reveal">
+    <div class="section-label" style="justify-content:center">Expertise</div>
+    <h2 class="section-title">A universe of capabilities</h2>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-card reveal" style="transition-delay:0.05s">
+      <div class="skill-icon">🎯</div>
+      <div class="skill-name">Lead Generation</div>
+      <div class="skill-level">Expert Level</div>
+      <div class="skill-bar"><div class="skill-fill" style="width:97%"></div></div>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:0.1s">
+      <div class="skill-icon">💼</div>
+      <div class="skill-name">LinkedIn Lead Gen</div>
+      <div class="skill-level">Expert Level</div>
+      <div class="skill-bar"><div class="skill-fill" style="width:96%"></div></div>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:0.15s">
+      <div class="skill-icon">⛏️</div>
+      <div class="skill-name">Data Mining</div>
+      <div class="skill-level">Expert Level</div>
+      <div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:0.2s">
+      <div class="skill-icon">📊</div>
+      <div class="skill-name">Data Entry</div>
+      <div class="skill-level">Expert Level</div>
+      <div class="skill-bar"><div class="skill-fill" style="width:98%"></div></div>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:0.25s">
+      <div class="skill-icon">🌐</div>
+      <div class="skill-name">Web Research</div>
+      <div class="skill-level">Expert Level</div>
+      <div class="skill-bar"><div class="skill-fill" style="width:94%"></div></div>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:0.3s">
+      <div class="skill-icon">📋</div>
+      <div class="skill-name">Contact List Building</div>
+      <div class="skill-level">Expert Level</div>
+      <div class="skill-bar"><div class="skill-fill" style="width:96%"></div></div>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:0.35s">
+      <div class="skill-icon">📧</div>
+      <div class="skill-name">Email Marketing</div>
+      <div class="skill-level">Advanced</div>
+      <div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:0.4s">
+      <div class="skill-icon">🕷️</div>
+      <div class="skill-name">Web Scraping</div>
+      <div class="skill-level">Expert Level</div>
+      <div class="skill-bar"><div class="skill-fill" style="width:92%"></div></div>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:0.45s">
+      <div class="skill-icon">📈</div>
+      <div class="skill-name">Microsoft Excel</div>
+      <div class="skill-level">Expert Level</div>
+      <div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:0.5s">
+      <div class="skill-icon">🏢</div>
+      <div class="skill-name">Company Research</div>
+      <div class="skill-level">Expert Level</div>
+      <div class="skill-bar"><div class="skill-fill" style="width:93%"></div></div>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:0.55s">
+      <div class="skill-icon">🎨</div>
+      <div class="skill-name">Graphic Design</div>
+      <div class="skill-level">Advanced</div>
+      <div class="skill-bar"><div class="skill-fill" style="width:87%"></div></div>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:0.6s">
+      <div class="skill-icon">▶️</div>
+      <div class="skill-name">YouTube Thumbnails</div>
+      <div class="skill-level">Advanced</div>
+      <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:0.65s">
+      <div class="skill-icon">🤝</div>
+      <div class="skill-name">LinkedIn Outreach</div>
+      <div class="skill-level">Expert Level</div>
+      <div class="skill-bar"><div class="skill-fill" style="width:96%"></div></div>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:0.7s">
+      <div class="skill-icon">🖥️</div>
+      <div class="skill-name">Virtual Assistance</div>
+      <div class="skill-level">Expert Level</div>
+      <div class="skill-bar"><div class="skill-fill" style="width:94%"></div></div>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:0.75s">
+      <div class="skill-icon">🔬</div>
+      <div class="skill-name">Academic Research</div>
+      <div class="skill-level">Advanced</div>
+      <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:0.8s">
+      <div class="skill-icon">🔍</div>
+      <div class="skill-name">LinkedIn Research</div>
+      <div class="skill-level">Expert Level</div>
+      <div class="skill-bar"><div class="skill-fill" style="width:97%"></div></div>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:0.85s">
+      <div class="skill-icon">📦</div>
+      <div class="skill-name">Data Collection</div>
+      <div class="skill-level">Expert Level</div>
+      <div class="skill-bar"><div class="skill-fill" style="width:96%"></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="reveal">
+    <div class="section-label">What I Do</div>
+    <h2 class="section-title">Services that move<br>businesses forward</h2>
+  </div>
+  <div class="services-grid">
+    <div class="service-card featured reveal reveal-delay-1">
+      <div class="service-num">01 — Signature</div>
+      <div class="service-title">Lead Generation & Prospecting</div>
+      <div class="service-desc">Hyper-targeted B2B lead generation using LinkedIn Sales Navigator, Apollo, Hunter.io, and proprietary research methods. Every lead is verified and ready to convert.</div>
+    </div>
+    <div class="service-card reveal reveal-delay-1">
+      <div class="service-num">02</div>
+      <div class="service-title">Data Mining & Web Scraping</div>
+      <div class="service-desc">Extract structured, high-quality data from any web source. Clean, organized, and delivered in your preferred format — Excel, CSV, Google Sheets.</div>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-num">03</div>
+      <div class="service-title">LinkedIn Strategy & Outreach</div>
+      <div class="service-desc">From profile optimization to targeted outreach campaigns — I build LinkedIn pipelines that generate real conversations and real revenue.</div>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-num">04</div>
+      <div class="service-title">Virtual Assistance</div>
+      <div class="service-desc">Comprehensive administrative support including email management, scheduling, research, data entry, and CRM management — your remote right hand.</div>
+    </div>
+    <div class="service-card reveal reveal-delay-3">
+      <div class="service-num">05</div>
+      <div class="service-title">Graphic Design</div>
+      <div class="service-desc">Visually compelling designs including YouTube thumbnails, social media graphics, branding assets, and marketing materials that capture attention instantly.</div>
+    </div>
+    <div class="service-card reveal reveal-delay-3">
+      <div class="service-num">06</div>
+      <div class="service-title">Research & Analysis</div>
+      <div class="service-desc">Deep-dive company research, market analysis, academic research, and competitive intelligence — transforming information into strategic advantage.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="reveal">
+    <div class="section-label" style="justify-content:center">Get In Touch</div>
+    <h2 class="section-title contact-title">Ready to build<br>something remarkable?</h2>
+    <p class="contact-sub">Whether you have a project in mind or just want to explore possibilities — I'm one message away. Let's create results that matter.</p>
+  </div>
+  <div class="contact-cards reveal reveal-delay-1">
+    <a href="https://wa.me/9230400140947?text=How%20can%20I%20help%20you%20today" class="contact-card" target="_blank">
+      <div class="contact-card-label">WhatsApp — Direct Message</div>
+      <div class="contact-card-value">+92 304 0140947</div>
+    </a>
+    <a href="mailto:arishupwork786@gmail.com" class="contact-card">
+      <div class="contact-card-label">Email</div>
+      <div class="contact-card-value">arishupwork786@gmail.com</div>
+    </a>
+  </div>
+  <div class="socials reveal reveal-delay-2">
+    <a href="https://www.upwork.com/freelancers/~0161f346eb7ef9acd7?mp_source=share" class="social-link" target="_blank">🏆 Upwork</a>
+    <a href="https://www.linkedin.com/in/muhammad-a-785576306" class="social-link" target="_blank">💼 LinkedIn</a>
+    <a href="https://www.facebook.com/share/1EEiqeTTsP/?mibextid=wwXIfr" class="social-link" target="_blank">📘 Facebook</a>
+    <a href="https://www.tiktok.com/@choudharyarish46?_r=1&_t=ZS-96P7rv8G95Q" class="social-link" target="_blank">🎵 TikTok</a>
+    <a href="https://www.instagram.com/choudharyarish46" class="social-link" target="_blank">📸 Instagram</a>
+  </div>
+</section>
+
+<footer>
+  <p>Crafted with precision by <span>Muhammad Arish</span> · Pakistan · 2025</p>
+</footer>
+
+<script>
+// ===== CURSOR =====
+const dot = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+let mx = -100, my = -100, rx = -100, ry = -100;
+const colors = ['#22D3EE','#38BDF8','#8B5CF6','#5EEAD4','#F59E0B'];
+let ci = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+});
+function animRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+setInterval(() => {
+  ci = (ci + 1) % colors.length;
+  dot.style.background = colors[ci];
+  dot.style.boxShadow = `0 0 12px ${colors[ci]}`;
+  ring.style.borderColor = colors[ci] + '88';
+}, 1500);
+document.querySelectorAll('a,button,.skill-card,.about-card').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    ring.style.width = '56px'; ring.style.height = '56px';
+  });
+  el.addEventListener('mouseleave', () => {
+    ring.style.width = '36px'; ring.style.height = '36px';
+  });
+});
+
+// ===== BG CANVAS =====
+const bgC = document.getElementById('bg-canvas');
+const bgCtx = bgC.getContext('2d');
+let W, H;
+function resize() {
+  W = bgC.width = window.innerWidth;
+  H = bgC.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+const orbs = Array.from({length: 5}, (_, i) => ({
+  x: Math.random() * W, y: Math.random() * H,
+  vx: (Math.random()-0.5)*0.3, vy: (Math.random()-0.5)*0.3,
+  r: 200 + Math.random()*300,
+  color: ['rgba(245,158,11,','rgba(34,211,238,','rgba(139,92,246,','rgba(251,146,60,','rgba(94,234,212,'][i]
+}));
+
+const stars = Array.from({length:120}, () => ({
+  x: Math.random()*W, y: Math.random()*H,
+  r: Math.random()*1.2, a: Math.random()
+}));
+
+function drawBg(t) {
+  bgCtx.clearRect(0,0,W,H);
+  bgCtx.fillStyle = '#0F172A';
+  bgCtx.fillRect(0,0,W,H);
+  // orbs
+  orbs.forEach(o => {
+    o.x += o.vx; o.y += o.vy;
+    if(o.x < -o.r || o.x > W+o.r) o.vx *= -1;
+    if(o.y < -o.r || o.y > H+o.r) o.vy *= -1;
+    const g = bgCtx.createRadialGradient(o.x,o.y,0,o.x,o.y,o.r);
+    g.addColorStop(0, o.color+'0.08)');
+    g.addColorStop(1, o.color+'0)');
+    bgCtx.fillStyle = g;
+    bgCtx.fillRect(0,0,W,H);
+  });
+  // stars
+  stars.forEach(s => {
+    s.a = 0.3 + 0.4*Math.sin(t*0.001 + s.x);
+    bgCtx.beginPath();
+    bgCtx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+    bgCtx.fillStyle = `rgba(255,255,255,${s.a})`;
+    bgCtx.fill();
+  });
+  requestAnimationFrame(drawBg);
+}
+drawBg(0);
+
+// ===== ENERGY TRAIL =====
+const tc = document.getElementById('trail-canvas');
+const tCtx = tc.getContext('2d');
+tc.width = window.innerWidth; tc.height = window.innerHeight;
+window.addEventListener('resize', () => { tc.width = window.innerWidth; tc.height = window.innerHeight; });
+const trailColors = ['#22D3EE','#38BDF8','#8B5CF6','#5EEAD4','#F59E0B','#FDBA74'];
+let particles = [];
+let trailTimer = 0;
+function spawnTrail() {
+  const name = 'Muhammad Arish';
+  const y = Math.random() * tc.height * 0.8 + tc.height * 0.1;
+  const speed = 2.5 + Math.random()*1.5;
+  for(let i=0;i<80;i++){
+    setTimeout(()=>{
+      particles.push({
+        x: -50 + i*tc.width/70, y: y + (Math.random()-0.5)*4,
+        vx: speed * (0.8+Math.random()*0.4),
+        vy: (Math.random()-0.5)*0.5,
+        alpha: 1, r: 1+Math.random()*2,
+        color: trailColors[Math.floor(Math.random()*trailColors.length)],
+        life: 1, decay: 0.008+Math.random()*0.006,
+        isText: i < 60
+      });
+    }, i*12);
+  }
+}
+setInterval(spawnTrail, 6000);
+setTimeout(spawnTrail, 2000);
+function animTrail() {
+  tCtx.clearRect(0,0,tc.width,tc.height);
+  particles = particles.filter(p => p.life > 0);
+  particles.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    p.life -= p.decay;
+    tCtx.beginPath();
+    tCtx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+    tCtx.fillStyle = p.color + Math.floor(p.life*255).toString(16).padStart(2,'0');
+    tCtx.fill();
+  });
+  requestAnimationFrame(animTrail);
+}
+animTrail();
+
+// ===== SCROLL REVEAL =====
+const reveals = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.12 });
+reveals.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
